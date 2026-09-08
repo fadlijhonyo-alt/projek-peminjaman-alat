@@ -54,57 +54,24 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-                <div class="p-5 border-b border-slate-200 bg-slate-50">
-                    <h3 class="text-lg font-bold text-slate-800">Aksi Cepat</h3>
-                </div>
-                <div class="p-5 space-y-3">
-                    <a href="{{ route('peminjam.katalog') }}" class="flex items-center justify-between p-3 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 transition">
-                        <span class="font-medium">Ajukan Peminjaman</span>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                    </a>
-
-                    <a href="{{ route('peminjam.riwayat') }}" class="flex items-center justify-between p-3 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
-                        <span class="font-medium">Lihat Riwayat Pinjam</span>
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                        </svg>
-                    </a>
-                </div>
+        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-slate-200 bg-slate-50">
+                <h3 class="text-lg font-bold text-slate-800">Aksi Cepat</h3>
             </div>
+            <div class="p-5 space-y-3">
+                <a href="{{ route('peminjam.katalog') }}" class="flex items-center justify-between p-3 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 transition">
+                    <span class="font-medium">Ajukan Peminjaman</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                </a>
 
-            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-                <div class="p-5 border-b border-slate-200 bg-slate-50">
-                    <h3 class="text-lg font-bold text-slate-800">Status Terbaru</h3>
-                </div>
-                <div class="p-5 space-y-3">
-                    <div class="flex items-center justify-between border border-slate-200 rounded-xl p-3">
-                        <div>
-                            <p class="font-medium text-slate-800">Laptop Lenovo</p>
-                            <p class="text-xs text-slate-500">Diajukan 2 hari lalu</p>
-                        </div>
-                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-100 text-amber-700">Diajukan</span>
-                    </div>
-
-                    <div class="flex items-center justify-between border border-slate-200 rounded-xl p-3">
-                        <div>
-                            <p class="font-medium text-slate-800">Proyektor</p>
-                            <p class="text-xs text-slate-500">Dipinjam sampai 12 Sep</p>
-                        </div>
-                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-700">Dipinjam</span>
-                    </div>
-
-                    <div class="flex items-center justify-between border border-slate-200 rounded-xl p-3">
-                        <div>
-                            <p class="font-medium text-slate-800">Mic Wireless</p>
-                            <p class="text-xs text-slate-500">Sudah dikembalikan</p>
-                        </div>
-                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">Selesai</span>
-                    </div>
-                </div>
+                <a href="{{ route('peminjam.riwayat') }}" class="flex items-center justify-between p-3 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                    <span class="font-medium">Lihat Riwayat Pinjam</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
+                </a>
             </div>
         </div>
     </div>
