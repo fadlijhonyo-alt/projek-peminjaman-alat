@@ -115,4 +115,42 @@ class PetugasController extends Controller
             'peminjaman' => $laporan
         ]);
     }
+    public function laporan(Request $request)
+{
+    $status = $request->input('status');
+    $dari_tanggal = $request->input('dari_tanggal');
+    $sampai_tanggal = $request->input('sampai_tanggal');
+
+    $laporans = Peminjaman::with(['user', 'detailPinjams.alat', 'pengembalian'])
+        ->when($status, function ($query, $status) {
+            return $query->where('status', $status);
+        })
+        ->when($dari_tanggal && $sampai_tanggal, function ($query) use ($dari_tanggal, $sampai_tanggal) {
+            return $query->whereBetween('tgl_pinjam', [$dari_tanggal, $sampai_tanggal]);
+        })
+        ->latest()
+        ->get();
+
+    return view('petugas.laporan.index', compact('laporans', 'status', 'dari_tanggal', 'sampai_tanggal'));
+}
+
+    // Menampilkan halaman khusus cetak (print preview)
+    public function cetakLaporan(Request $request)
+    {
+        $status = $request->input('status');
+        $dari_tanggal = $request->input('dari_tanggal');
+        $sampai_tanggal = $request->input('sampai_tanggal');
+
+        $laporans = Peminjaman::with(['user', 'detailPinjams.alat', 'pengembalian'])
+            ->when($status, function ($query, $status) {
+            return $query->where('status', $status);
+         })
+            ->when($dari_tanggal && $sampai_tanggal, function ($query) use ($dari_tanggal, $sampai_tanggal) {
+            return $query->whereBetween('tgl_pinjam', [$dari_tanggal, $sampai_tanggal]);
+            })
+            ->latest()
+            ->get();
+
+    return view('petugas.laporan.cetak', compact('laporans', 'status', 'dari_tanggal', 'sampai_tanggal'));
+}   
 }

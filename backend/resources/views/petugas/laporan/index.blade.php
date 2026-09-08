@@ -31,7 +31,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    @forelse($peminjaman as $index => $item)
+                    @forelse($laporans as $index => $item)
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4">{{ $index + 1 }}</td>
                             <td class="px-6 py-4 font-medium text-gray-900">{{ $item->user->name ?? '-' }}</td>
