@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class PeminjamController extends Controller
 {
+    public function dashboard()
+    {
+        return view('peminjam.dashboard');
+    }
+
     // Melihat daftar/katalog alat yang tersedia
     public function katalogAlat()
     {
