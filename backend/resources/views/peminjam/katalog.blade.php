@@ -45,63 +45,68 @@
         <form action="{{ route('peminjam.peminjaman.ajukan') }}" method="POST" class="space-y-5">
             @csrf
 
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="p-5 border-b border-slate-200 bg-slate-50">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label for="tgl_kembali_plan" class="block text-sm font-medium text-slate-700 mb-2">
-                                Rencana Tanggal Kembali
-                            </label>
-                            <input type="date" id="tgl_kembali_plan" name="tgl_kembali_plan" required
-                                   class="w-full border border-slate-300 rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
+            <section class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+                <div class="grid grid-cols-1 gap-4 border-b border-slate-200 bg-slate-50 p-5 sm:grid-cols-[1fr_auto] sm:items-end">
+                    <div>
+                        <label for="tgl_kembali_plan" class="mb-2 block text-sm font-semibold text-slate-700">Rencana Tanggal Kembali</label>
+                        <input type="date" id="tgl_kembali_plan" name="tgl_kembali_plan" min="{{ now()->addDay()->toDateString() }}"
+                               value="{{ old('tgl_kembali_plan') }}" required
+                               class="w-full max-w-sm border border-slate-300 rounded-md px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                        @error('tgl_kembali_plan') <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
                     </div>
+                    <p class="text-sm text-slate-500">{{ $alats->count() }} alat tersedia untuk dipilih</p>
                 </div>
 
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left text-slate-600">
-                        <thead class="bg-slate-100 text-slate-700 uppercase text-xs">
-                            <tr>
-                                <th class="px-5 py-3">Pilih</th>
-                                <th class="px-5 py-3">Nama Alat</th>
-                                <th class="px-5 py-3">Kategori</th>
-                                <th class="px-5 py-3">Stok</th>
-                                <th class="px-5 py-3">Jumlah</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-200">
-                            @forelse($alats as $alat)
-                                <tr class="hover:bg-slate-50">
-                                    <td class="px-5 py-4 text-center">
-                                        <input type="checkbox" name="alat_id[]" value="{{ $alat->id }}"
-                                               class="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500">
-                                    </td>
-                                    <td class="px-5 py-4 font-medium text-slate-800">{{ $alat->nama_alat }}</td>
-                                    <td class="px-5 py-4">{{ $alat->kategori->nama_kategori ?? '-' }}</td>
-                                    <td class="px-5 py-4">
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
-                                            {{ $alat->stok }} pcs
-                                        </span>
-                                    </td>
-                                    <td class="px-5 py-4">
-                                        <input type="number" name="jumlah[]" min="1" max="{{ $alat->stok }}" value="1"
-                                               class="w-24 border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="px-5 py-8 text-center text-slate-500">
-                                        Tidak ada alat yang tersedia saat ini.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                <div class="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 xl:grid-cols-3">
+                    @forelse($alats as $alat)
+                        <article class="overflow-hidden rounded-lg border border-slate-200 bg-white transition hover:border-emerald-300 hover:shadow-md">
+                            <div class="aspect-[4/3] overflow-hidden bg-slate-100">
+                                @if($alat->gambar)
+                                    <img src="{{ asset(str_starts_with($alat->gambar, 'storage/') ? $alat->gambar : 'storage/' . $alat->gambar) }}"
+                                         alt="Foto {{ $alat->nama_alat }}" loading="lazy" class="h-full w-full object-cover">
+                                @else
+                                    <div class="flex h-full items-center justify-center bg-gradient-to-br from-slate-100 via-emerald-50 to-blue-100 text-sm font-medium text-slate-400">
+                                        Foto belum tersedia
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="space-y-4 p-4">
+                                <div class="flex items-start justify-between gap-3">
+                                    <div class="min-w-0">
+                                        <p class="text-xs font-semibold uppercase text-emerald-700">{{ $alat->kategori->nama_kategori ?? 'Tanpa kategori' }}</p>
+                                        <h3 class="mt-1 font-bold text-slate-900">{{ $alat->nama_alat }}</h3>
+                                    </div>
+                                    <span class="shrink-0 rounded-md bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-800">{{ $alat->stok }} tersedia</span>
+                                </div>
+                                <p class="min-h-12 text-sm leading-5 text-slate-600">{{ $alat->deskripsi ?: 'Deskripsi alat belum tersedia.' }}</p>
+                                <div class="flex items-end justify-between gap-3 border-t border-slate-100 pt-3">
+                                    <label for="alat-{{ $alat->id }}" class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-700">
+                                        <input id="alat-{{ $alat->id }}" type="checkbox" name="alat_id[{{ $alat->id }}]" value="{{ $alat->id }}"
+                                               @checked(old('alat_id.' . $alat->id))
+                                               class="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                                        Pilih alat
+                                    </label>
+                                    <div>
+                                        <label for="jumlah-{{ $alat->id }}" class="mb-1 block text-xs font-medium text-slate-500">Jumlah</label>
+                                        <input id="jumlah-{{ $alat->id }}" type="number" name="jumlah[{{ $alat->id }}]" min="1" max="{{ $alat->stok }}"
+                                               value="{{ old('jumlah.' . $alat->id, 1) }}"
+                                               class="w-20 rounded-md border border-slate-300 px-2.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    @empty
+                        <div class="col-span-full rounded-md border border-dashed border-slate-300 px-5 py-12 text-center text-sm text-slate-500">
+                            Tidak ada alat yang tersedia saat ini.
+                        </div>
+                    @endforelse
                 </div>
 
-                <div class="p-5 border-t border-slate-200 bg-slate-50 flex justify-end">
-                    <button type="submit"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold shadow-sm transition">
+                @error('alat_id') <p class="px-5 pb-3 text-sm text-rose-600">{{ $message }}</p> @enderror
+                @error('jumlah.*') <p class="px-5 pb-3 text-sm text-rose-600">{{ $message }}</p> @enderror
+
+                <div class="flex justify-end border-t border-slate-200 bg-slate-50 p-5">
+                    <button type="submit" class="rounded-md bg-emerald-600 px-5 py-2.5 font-semibold text-white shadow-sm transition hover:bg-emerald-700">
                         Ajukan Peminjaman
                     </button>
                 </div>

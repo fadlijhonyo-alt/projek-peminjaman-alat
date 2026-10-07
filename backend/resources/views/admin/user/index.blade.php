@@ -40,6 +40,7 @@
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-gray-100 text-gray-600 text-sm uppercase tracking-wider">
+                        <th class="py-3 px-4 border-b">Foto Profil</th>
                         <th class="py-3 px-4 border-b">Nama</th>
                         <th class="py-3 px-4 border-b">Email</th>
                         <th class="py-3 px-4 border-b">Role / Hak Akses</th>
@@ -51,6 +52,16 @@
                 <tbody class="text-gray-700 text-sm">
                     @forelse($users as $user)
                         <tr class="hover:bg-gray-50 transition">
+                            <td class="py-3 px-4 border-b">
+                                @if($user->foto_profile)
+                                    <img src="{{ asset('storage/' . $user->foto_profile) }}" alt="Foto profil {{ $user->name }}"
+                                        class="w-10 h-10 object-cover rounded-full">
+                                @else
+                                    <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-semibold">
+                                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                                    </div>
+                                @endif
+                            </td>
                             <td class="py-3 px-4 border-b font-medium text-gray-900">
                                 {{ $user->name }}
                             </td>
@@ -74,26 +85,30 @@
 
                             <td class="py-3 px-4 border-b">
                                 <div class="flex items-center space-x-2">
-                                    <!-- Tombol Edit -->
-                                    <a href="{{ route('admin.user.edit', $user->id) }}"
-                                       class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded text-xs font-semibold transition">
-                                       Edit
-                                    </a>
-
-                                    <!-- Tombol Hapus -->
-                                    <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus user ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-xs font-semibold transition">
-                                            Hapus
-                                        </button>
-                                    </form>
+                                    @if(auth()->user()->is($user))
+                                        <a href="{{ route('admin.user.edit', $user->id) }}"
+                                           class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded text-xs font-semibold transition">
+                                           Edit
+                                        </a>
+                                    @else
+                                        <a href="{{ route('admin.user.edit', $user->id) }}"
+                                           class="bg-amber-500 hover:bg-amber-600 text-white px-3 py-1.5 rounded text-xs font-semibold transition">
+                                           Edit
+                                        </a>
+                                        <form action="{{ route('admin.user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus user ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-xs font-semibold transition">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="py-4 text-center text-gray-500">
+                            <td colspan="6" class="py-4 text-center text-gray-500">
                                 Belum ada data pengguna.
                             </td>
                         </tr>

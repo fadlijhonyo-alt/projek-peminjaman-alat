@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="max-w-xl bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-    <form action="{{ route('admin.user.store') }}" method="POST">
+    <form action="{{ route('admin.user.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="mb-4">
@@ -13,6 +13,13 @@
             <input type="text" name="name" value="{{ old('name') }}" required
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
             @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-semibold mb-2">Foto Profil (Opsional)</label>
+            <input type="file" name="foto_profile" accept="image/jpeg,image/png"
+                class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+            @error('foto_profile') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
         </div>
 
         <div class="mb-4">

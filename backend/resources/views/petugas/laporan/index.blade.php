@@ -21,14 +21,20 @@
         </div>
 
         <div class="p-5 border-b border-gray-200 bg-gray-50">
-            <form action="{{ route('petugas.laporan.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <form action="{{ route('petugas.laporan.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                <div>
+                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari</label>
+                    <input id="search" type="search" name="search" value="{{ $search }}" placeholder="Nama, email, atau alat..."
+                           class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
                 <div>
                     <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                     <select id="status" name="status" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">Semua Status</option>
                         <option value="diajukan" {{ request('status') == 'diajukan' ? 'selected' : '' }}>Diajukan</option>
                         <option value="dipinjam" {{ request('status') == 'dipinjam' ? 'selected' : '' }}>Dipinjam</option>
-                        <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai</option>
+                        <option value="dikembalikan" {{ in_array(request('status'), ['dikembalikan', 'selesai'], true) ? 'selected' : '' }}>Dikembalikan</option>
+                        <option value="telat" {{ request('status') == 'telat' ? 'selected' : '' }}>Telat</option>
                         <option value="ditolak" {{ request('status') == 'ditolak' ? 'selected' : '' }}>Ditolak</option>
                     </select>
                 </div>
@@ -78,11 +84,11 @@
                             <td class="px-6 py-4">{{ $item->tgl_kembali_plan }}</td>
                             <td class="px-6 py-4">
                                 <span class="px-2.5 py-1 text-xs font-semibold rounded-full 
-                                    @if($item->status == 'diajukan') bg-amber-100 text-amber-800
+                                    @if($item->status == 'diajukan') bg-yellow-100 text-yellow-800
                                     @elseif($item->status == 'dipinjam') bg-blue-100 text-blue-800
-                                    @elseif($item->status == 'selesai') bg-emerald-100 text-emerald-800
+                                    @elseif(in_array($item->status, ['dikembalikan', 'selesai'], true)) bg-emerald-100 text-emerald-800
                                     @else bg-red-100 text-red-800 @endif">
-                                    {{ ucfirst($item->status) }}
+                                    {{ in_array($item->status, ['dikembalikan', 'selesai'], true) ? 'Dikembalikan' : ucfirst($item->status) }}
                                 </span>
                             </td>
                             <td class="px-6 py-4">

@@ -15,6 +15,26 @@
         <div class="p-5 border-b border-gray-200 bg-gray-50">
             <h3 class="text-lg font-bold text-gray-800">Log Aktivitas Terbaru</h3>
         </div>
+        <form action="{{ route('admin.dashboard') }}" method="GET" class="p-4 border-b border-gray-200 grid grid-cols-1 md:grid-cols-4 gap-3">
+            <input type="search" name="search" value="{{ $search }}" placeholder="Cari aktivitas, nama, atau email..."
+                class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div>
+                <label for="dari_tanggal" class="block text-xs font-medium text-gray-600 mb-1">Dari tanggal</label>
+                <input id="dari_tanggal" type="date" name="dari_tanggal" value="{{ $dariTanggal }}"
+                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+                <label for="sampai_tanggal" class="block text-xs font-medium text-gray-600 mb-1">Sampai tanggal</label>
+                <input id="sampai_tanggal" type="date" name="sampai_tanggal" value="{{ $sampaiTanggal }}"
+                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="flex items-end gap-2">
+                <button type="submit" class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 text-sm font-semibold rounded-lg transition">Cari / Filter</button>
+                @if($search || $dariTanggal || $sampaiTanggal)
+                    <a href="{{ route('admin.dashboard') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 text-sm font-semibold rounded-lg transition">Reset</a>
+                @endif
+            </div>
+        </form>
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -38,6 +58,9 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+        <div class="p-4 border-t border-gray-200 bg-gray-50">
+            {{ $logs->links() }}
         </div>
     </div>
 @endsection

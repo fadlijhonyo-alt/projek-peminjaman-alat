@@ -27,11 +27,17 @@ class PeminjamanObserver
     public function created(Peminjaman $peminjaman): void
     {
         $namaPeminjam = $peminjaman->user?->name ?? 'User';
+        $aktor = Auth::user();
 
-        $this->catatLog(
-            "Peminjam ({$namaPeminjam}) membuat permohonan " .
-            "peminjaman baru (ID: #{$peminjaman->id})"
-        );
+        if ($aktor?->role === 'admin') {
+            $pesan = "Admin {$aktor->name} membuat permohonan peminjaman " .
+                "untuk {$namaPeminjam} (ID: #{$peminjaman->id})";
+        } else {
+            $pesan = "Peminjam ({$namaPeminjam}) membuat permohonan " .
+                "peminjaman baru (ID: #{$peminjaman->id})";
+        }
+
+        $this->catatLog($pesan);
     }
 
     /**
@@ -41,9 +47,10 @@ class PeminjamanObserver
     {
         // Jika status berubah, catat perubahan status
         if ($peminjaman->wasChanged('status')) {
+            $statusLama = $peminjaman->getOriginal('status');
             $this->catatLog(
                 "Status peminjaman (ID: #{$peminjaman->id}) " .
-                "berubah menjadi: '{$peminjaman->status}'"
+                "berubah dari '{$statusLama}' menjadi '{$peminjaman->status}'"
             );
 
             return;

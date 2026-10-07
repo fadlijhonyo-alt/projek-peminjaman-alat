@@ -16,20 +16,39 @@
     @endif
 
     <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
-        <div class="p-5 border-b border-gray-200 bg-gray-50 flex flex-wrap items-center justify-between gap-4">
+        <div class="p-5 border-b border-gray-200 bg-gray-50">
             <h3 class="text-lg font-bold text-gray-800">Menunggu Verifikasi Persetujuan</h3>
-            <form action="{{ route('petugas.peminjaman.index') }}" method="GET" class="flex w-full md:w-80">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama peminjam..."
-                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                <button type="submit" class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 text-sm font-semibold rounded-r-lg transition">
-                    Cari
-                </button>
-                @if(request('search'))
-                    <a href="{{ route('petugas.peminjaman.index') }}"
-                        class="ml-2 bg-gray-300 hover:bg-gray-400 text-gray-700 px-3 py-2 text-sm rounded-lg flex items-center transition">
-                        Reset
-                    </a>
-                @endif
+            <form action="{{ route('petugas.peminjaman.index') }}" method="GET" class="mt-4 grid grid-cols-1 gap-3 md:grid-cols-5">
+                <div>
+                    <label for="search" class="mb-1 block text-sm font-medium text-gray-700">Cari</label>
+                    <input id="search" type="search" name="search" value="{{ request('search') }}" placeholder="Nama, email, atau alat..."
+                        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+                </div>
+                <div>
+                    <label for="status" class="mb-1 block text-sm font-medium text-gray-700">Status</label>
+                    <select id="status" name="status" class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+                        <option value="">Semua Status</option>
+                        <option value="diajukan" {{ request('status') === 'diajukan' ? 'selected' : '' }}>Diajukan</option>
+                        <option value="dipinjam" {{ request('status') === 'dipinjam' ? 'selected' : '' }}>Dipinjam</option>
+                        <option value="dikembalikan" {{ request('status') === 'dikembalikan' ? 'selected' : '' }}>Dikembalikan</option>
+                        <option value="telat" {{ request('status') === 'telat' ? 'selected' : '' }}>Telat</option>
+                        <option value="ditolak" {{ request('status') === 'ditolak' ? 'selected' : '' }}>Ditolak</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="dari_tanggal" class="mb-1 block text-sm font-medium text-gray-700">Dari Tanggal</label>
+                    <input id="dari_tanggal" type="date" name="dari_tanggal" value="{{ request('dari_tanggal') }}"
+                        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+                </div>
+                <div>
+                    <label for="sampai_tanggal" class="mb-1 block text-sm font-medium text-gray-700">Sampai Tanggal</label>
+                    <input id="sampai_tanggal" type="date" name="sampai_tanggal" value="{{ request('sampai_tanggal') }}"
+                        class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-100">
+                </div>
+                <div class="flex items-end gap-2">
+                    <button type="submit" class="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700">Filter</button>
+                    <a href="{{ route('petugas.peminjaman.index') }}" class="rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300">Reset</a>
+                </div>
             </form>
         </div>
 
@@ -81,7 +100,8 @@
                                         </form>
                                     </div>
                                 @else
-                                    <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded">
+                                    <span class="text-xs font-semibold px-2.5 py-1 rounded
+                                        {{ $item->status == 'ditolak' ? 'text-red-700 bg-red-50' : 'text-blue-600 bg-blue-50' }}">
                                         {{ ucfirst($item->status) }}
                                     </span>
                                 @endif
@@ -95,5 +115,11 @@
                 </tbody>
             </table>
         </div>
+
+        @if($peminjaman->hasPages())
+            <div class="border-t border-gray-200 px-4 py-3">
+                {{ $peminjaman->links() }}
+            </div>
+        @endif
     </div>
 @endsection

@@ -4,75 +4,85 @@
 @section('header-title', 'Dashboard Peminjam')
 
 @section('content')
-    <div class="space-y-6">
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-xl shadow-sm">
-            Selamat datang, <strong class="font-semibold">{{ auth()->user()->name }}</strong>! Anda login sebagai
-            <span class="uppercase font-bold text-emerald-900">{{ auth()->user()->role }}</span>.
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">Pinjaman Aktif</p>
-                        <h3 class="mt-2 text-3xl font-bold text-slate-800">3</h3>
-                    </div>
-                    <div class="bg-blue-100 text-blue-700 p-3 rounded-xl">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                        </svg>
-                    </div>
+    <div class="space-y-6 pb-6">
+        <section class="relative overflow-hidden rounded-lg bg-slate-950 px-6 py-7 text-white shadow-sm sm:px-8">
+            <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-emerald-500/20 to-transparent"></div>
+            <div class="relative flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-widest text-emerald-300">Panel Peminjam</p>
+                    <h2 class="mt-2 text-2xl font-bold">Halo, {{ auth()->user()->name }}</h2>
+                    <p class="mt-1 text-sm text-slate-300">Pantau pengajuan dan status peminjaman alat Anda.</p>
                 </div>
-            </div>
-
-            <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">Menunggu Persetujuan</p>
-                        <h3 class="mt-2 text-3xl font-bold text-slate-800">2</h3>
-                    </div>
-                    <div class="bg-amber-100 text-amber-700 p-3 rounded-xl">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">Selesai</p>
-                        <h3 class="mt-2 text-3xl font-bold text-slate-800">5</h3>
-                    </div>
-                    <div class="bg-emerald-100 text-emerald-700 p-3 rounded-xl">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 3"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-            <div class="p-5 border-b border-slate-200 bg-slate-50">
-                <h3 class="text-lg font-bold text-slate-800">Aksi Cepat</h3>
-            </div>
-            <div class="p-5 space-y-3">
-                <a href="{{ route('peminjam.katalog') }}" class="flex items-center justify-between p-3 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 transition">
-                    <span class="font-medium">Ajukan Peminjaman</span>
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                </a>
-
-                <a href="{{ route('peminjam.riwayat') }}" class="flex items-center justify-between p-3 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
-                    <span class="font-medium">Lihat Riwayat Pinjam</span>
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                    </svg>
+                <a href="{{ route('peminjam.katalog') }}" class="inline-flex items-center justify-center gap-2 rounded-md bg-emerald-400 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300">
+                    Ajukan Peminjaman
+                    <span aria-hidden="true">&rarr;</span>
                 </a>
             </div>
-        </div>
+        </section>
+
+        <section class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div class="rounded-lg border border-blue-200 bg-white p-5 shadow-sm">
+                <p class="text-sm font-medium text-slate-500">Pinjaman Aktif</p>
+                <div class="mt-3 flex items-end justify-between">
+                    <p class="text-3xl font-bold text-slate-900">{{ $jumlahAktif }}</p>
+                    <span class="rounded-md bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-800">Dipinjam / Telat</span>
+                </div>
+            </div>
+            <div class="rounded-lg border border-yellow-200 bg-white p-5 shadow-sm">
+                <p class="text-sm font-medium text-slate-500">Menunggu Persetujuan</p>
+                <div class="mt-3 flex items-end justify-between">
+                    <p class="text-3xl font-bold text-slate-900">{{ $jumlahMenunggu }}</p>
+                    <span class="rounded-md bg-yellow-100 px-2.5 py-1 text-xs font-semibold text-yellow-800">Diajukan</span>
+                </div>
+            </div>
+            <div class="rounded-lg border border-emerald-200 bg-white p-5 shadow-sm">
+                <p class="text-sm font-medium text-slate-500">Dikembalikan</p>
+                <div class="mt-3 flex items-end justify-between">
+                    <p class="text-3xl font-bold text-slate-900">{{ $jumlahDikembalikan }}</p>
+                    <span class="rounded-md bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-800">Selesai</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+            <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+                <div>
+                    <h3 class="font-bold text-slate-900">Aktivitas Peminjaman Terbaru</h3>
+                    <p class="mt-1 text-xs text-slate-500">Pembaruan pengajuan terakhir pada akun Anda</p>
+                </div>
+                <a href="{{ route('peminjam.riwayat') }}" class="text-sm font-semibold text-emerald-700 hover:text-emerald-800">Lihat riwayat</a>
+            </div>
+            <div class="divide-y divide-slate-100">
+                @forelse($aktivitasTerbaru as $item)
+                    @php
+                        $statusDikembalikan = in_array($item->status, ['dikembalikan', 'selesai'], true);
+                        $statusClass = match ($item->status) {
+                            'diajukan' => 'bg-yellow-100 text-yellow-800',
+                            'dipinjam' => 'bg-blue-100 text-blue-800',
+                            'dikembalikan', 'selesai' => 'bg-emerald-100 text-emerald-800',
+                            'ditolak', 'telat' => 'bg-rose-100 text-rose-800',
+                            default => 'bg-slate-100 text-slate-700',
+                        };
+                    @endphp
+                    <div class="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <p class="font-semibold text-slate-800">
+                                @forelse($item->detailPinjams as $detail)
+                                    {{ $detail->alat->nama_alat ?? 'Alat dihapus' }}{{ !$loop->last ? ', ' : '' }}
+                                @empty
+                                    Pengajuan peminjaman #{{ $item->id }}
+                                @endforelse
+                            </p>
+                            <p class="mt-1 text-xs text-slate-500">Diajukan {{ $item->created_at->format('d-m-Y H:i') }}</p>
+                        </div>
+                        <span class="w-fit rounded-md px-2.5 py-1 text-xs font-semibold {{ $statusClass }}">
+                            {{ $statusDikembalikan ? 'Dikembalikan' : ucfirst($item->status) }}
+                        </span>
+                    </div>
+                @empty
+                    <p class="px-5 py-10 text-center text-sm text-slate-500">Belum ada aktivitas peminjaman.</p>
+                @endforelse
+            </div>
+        </section>
     </div>
 @endsection
