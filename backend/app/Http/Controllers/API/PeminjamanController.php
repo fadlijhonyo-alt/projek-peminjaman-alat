@@ -109,7 +109,7 @@ $user->id) {
  
                 $peminjaman->detailPinjam()->delete(); 
                 foreach ($request->items as $item) { 
-                    // Ditambahkan lockForUpdate agar konsisten aman dari race condition saat update data draft 
+                    
                     $alat = 
 Alat::lockForUpdate()->findOrFail($item['alat_id']); 
                     
@@ -142,12 +142,14 @@ Alat::lockForUpdate()->findOrFail($item['alat_id']);
         $user = auth()->user(); 
  
         if ($user->role === 'peminjam' && $peminjaman->user_id !== 
-$user->id) { 
+            $user->id) 
+        { 
             return response()->json(['message' => 'Akses ditolak.'], 403); 
         } 
-        if ($peminjaman->status !== 'diajukan') { 
+        if ($peminjaman->status !== 'diajukan') 
+        { 
             return response()->json(['message' => 'Peminjaman tidak dapat 
-dibatalkan.'], 400); 
+        dibatalkan.'], 400); 
         } 
  
         DB::transaction(function () use ($peminjaman) { 

@@ -19,14 +19,6 @@
                     </svg>
                     Dashboard
                 </a>
-                <a href="{{ route('peminjam.riwayat') }}"
-                   class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-xl font-medium shadow-sm transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    Riwayat Pinjam
-                </a>
             </div>
         </div>
 
@@ -43,7 +35,7 @@
         @endif
 
         <form action="{{ route('peminjam.peminjaman.ajukan') }}" method="POST" class="space-y-5">
-            @csrf
+            @csrf 
 
             <section class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
                 <div class="grid grid-cols-1 gap-4 border-b border-slate-200 bg-slate-50 p-5 sm:grid-cols-[1fr_auto] sm:items-end">
@@ -56,7 +48,7 @@
                     </div>
                     <p class="text-sm text-slate-500">{{ $alats->count() }} alat tersedia untuk dipilih</p>
                 </div>
-
+                
                 <div class="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 xl:grid-cols-3">
                     @forelse($alats as $alat)
                         <article class="overflow-hidden rounded-lg border border-slate-200 bg-white transition hover:border-emerald-300 hover:shadow-md">

@@ -15,10 +15,6 @@ Route::get('/', function () {
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 
-    // CRUD Alat
-    Route::get('/alat', [AdminController::class, 'indexAlat'])->name('alat.index');
-    Route::post('/alat', [AdminController::class, 'storeAlat'])->name('alat.store');
-
     // CRUD User
     Route::get('/users', [AdminController::class, 'indexUser'])->name('user.index');
     Route::get('/users/create', [AdminController::class, 'createUser'])->name('user.create');
@@ -54,12 +50,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/pengembalian', [AdminController::class, 'indexPengembalian'])->name('pengembalian.index');
     Route::get('/pengembalian/{id}/create', [AdminController::class, 'createPengembalian'])->name('pengembalian.create');
     Route::put('/pengembalian/{id}', [AdminController::class, 'kembalikan'])->name('pengembalian.kembalikan');
-    // Menampilkan daftar riwayat pengembalian
-    Route::get('/pengembalian', [AdminController::class, 'indexPengembalian'])->name('pengembalian.index');
     // Memproses pengembalian (saat tombol diklik)
     Route::post('/pengembalian/{id}/proses', [AdminController::class, 'kembalikan'])->name('pengembalian.proses');
-    Route::get('/admin/pengembalian/{id}/edit', [AdminController::class, 'editPengembalian'])->name('admin.pengembalian.edit');
-    Route::put('/admin/pengembalian/{id}', [AdminController::class, 'updatePengembalian'])->name('admin.pengembalian.update');
     });
 
 // Petugas

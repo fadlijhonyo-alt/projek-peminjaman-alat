@@ -77,18 +77,35 @@ class AlatController extends Controller
     }
 
     public function destroy(Alat $alat): JsonResponse
-    {
-        DB::transaction(function () use ($alat) {
-            if ($alat->gambar) {
-                Storage::disk('public')->delete($alat->gambar);
-            }
+{
+    $Dipinjam = DB::table('detail_peminjamans')
+        ->join(
+            'peminjamans',
+            'detail_peminjamans.peminjaman_id',
+            '=',
+            'peminjamans.id'
+            )
+        ->where('detail_peminjamans.alat_id', $alat->id)
+        ->where('peminjamans.status', 'dipinjam')
+        ->exists();
 
-            $alat->delete();
-        });
-
+    if ($Dipinjam) {
         return response()->json([
-            'message' => 'Alat berhasil dihapus.',
-        ]);
+            'message' => 'Alat sedang dipinjam dan tidak bisa dihapus sebelum dikembalikan.',
+        ], 422);
+    }
+
+    DB::transaction(function () use ($alat) {
+        if ($alat->gambar) {
+            Storage::disk('public')->delete($alat->gambar);
+        }
+
+        $alat->delete();
+    });
+
+    return response()->json([
+        'message' => 'Alat berhasil dihapus.',
+    ]);
     }
 
     public function katalog(): JsonResponse
@@ -100,4 +117,5 @@ class AlatController extends Controller
             'data' => AlatResource::collection($alat),
         ]);
     }
+    
 }

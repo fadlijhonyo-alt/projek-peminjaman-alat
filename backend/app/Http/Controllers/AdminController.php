@@ -143,20 +143,33 @@ class AdminController extends Controller
         return redirect()->route('admin.alat.index')->with('success', 'Data alat berhasil diperbarui.');
     }
 
-    // Menghapus data alat
-    public function destroyAlat($id)
-    {
-        $alat = Alat::findOrFail($id);
+   // Menghapus data alat
+public function destroyAlat($id)
+{
+    $alat = Alat::findOrFail($id);
 
-        // Hapus file gambar fisik jika ada
-        if ($alat->gambar && file_exists(public_path($alat->gambar))) {
-            unlink(public_path($alat->gambar));
-        }
+    // Cek apakah alat masih dipinjam
+    $masihDipinjam = DB::table('detail_peminjaman')
+        ->join('peminjamans', 'detail_peminjaman.peminjaman_id', '=', 'peminjamans.id')
+        ->where('detail_peminjaman.alat_id', $id)
+        ->where('peminjamans.status', 'dipinjam')
+        ->exists();
 
-        $alat->delete();
-
-        return redirect()->route('admin.alat.index')->with('success', 'Data alat berhasil dihapus.');
+    if ($masihDipinjam) {
+        return redirect()->route('admin.alat.index')
+            ->with('error', 'Alat tidak bisa dihapus karena masih dipinjam.');
     }
+
+    // Hapus gambar jika ada
+    if ($alat->gambar && file_exists(public_path($alat->gambar))) {
+        unlink(public_path($alat->gambar));
+    }
+
+    $alat->delete();
+
+    return redirect()->route('admin.alat.index')
+        ->with('success', 'Data alat berhasil dihapus.');
+}
 
     // CRUD User: Manajemen user (admin, petugas, peminjam)
     public function indexUser(Request $request)

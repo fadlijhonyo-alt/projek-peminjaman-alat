@@ -21,7 +21,7 @@
                 <img src="{{ asset('storage/' . $user->foto_profile) }}" alt="Foto profil {{ $user->name }}"
                     class="w-20 h-20 object-cover rounded-full border border-gray-200 mb-2">
             @endif
-            <input type="file" name="foto_profile" accept="image/jpeg,image/png"
+            <input type="file" name="foto_profile"  accept="image/*"
                 class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
             <p class="mt-1 text-xs text-gray-500">Kosongkan jika tidak ingin mengubah foto. Maksimal 2 MB.</p>
             @error('foto_profile') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
