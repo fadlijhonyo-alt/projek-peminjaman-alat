@@ -108,11 +108,18 @@ class PeminjamController extends Controller
     // Melihat riwayat peminjaman user yang sedang login
     public function riwayatPeminjaman()
     {
-        $peminjamans = Peminjaman::with('detailPinjams.alat')
+        $peminjamans = Peminjaman::with(['detailPinjams.alat', 'pengembalian'])
             ->where('user_id', auth()->id())
             ->latest()
             ->get();
 
-        return view('peminjam.riwayat', compact('peminjamans'));
+        $hariIni = today();
+        $jumlahTerlambat = $peminjamans->filter(function ($peminjaman) use ($hariIni) {
+            return in_array($peminjaman->status, ['dipinjam', 'telat'], true)
+                && !$peminjaman->pengembalian
+                && $peminjaman->tgl_kembali_plan->lt($hariIni);
+        })->count();
+
+        return view('peminjam.riwayat', compact('peminjamans', 'hariIni', 'jumlahTerlambat'));
     }
 }

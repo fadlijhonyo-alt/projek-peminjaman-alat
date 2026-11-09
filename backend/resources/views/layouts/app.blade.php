@@ -175,6 +175,7 @@
                             <span>Cetak Laporan</span>
                         </a>
                     @endif
+
                 </nav>
             </div>
 
@@ -182,7 +183,8 @@
             <div class="p-4 border-t border-slate-800 text-xs text-slate-400 bg-slate-950/40">
                 <p class="mb-0.5">Logged in as :</p>
                 @auth
-                    <div class="mt-2 flex items-center gap-3">
+                    <a href="{{ route('profile') }}"
+                       class="mt-2 flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 {{ request()->routeIs('profile') ? 'bg-slate-800' : '' }}">
                         @if(auth()->user()->foto_profile)
                             <img src="{{ asset('storage/' . ltrim(auth()->user()->foto_profile, '/')) }}"
                                  alt="Foto {{ auth()->user()->name }}"
@@ -194,8 +196,9 @@
                         @endif
                         <span class="truncate font-semibold text-slate-200 text-sm">
                             {{ auth()->user()->name }}
+                            <span class="mt-0.5 block text-xs font-normal text-slate-400">Lihat profil</span>
                         </span>
-                    </div>
+                    </a>
                 @endauth
             </div>
 
