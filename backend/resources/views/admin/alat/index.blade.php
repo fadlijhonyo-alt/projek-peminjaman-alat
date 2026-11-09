@@ -9,6 +9,11 @@
         {{ session('success') }}
     </div>
 @endif
+@if(session('error'))
+    <div class="mb-4 bg-red-50 border border-red-200 text-red-800 p-4 rounded-lg shadow-sm text-sm">
+        {{ session('error') }}
+    </div>
+@endif
 
 <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
     <div class="p-5 border-b border-gray-200 bg-gray-50 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -80,7 +85,16 @@
                                 method="POST" onsubmit="return confirm('Yakin ingin menghapus alat ini?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded text-xs font-semibold transition">
+                                @php
+                                    $alatSedangDipinjam = $alat->detailPinjam()
+                                        ->whereHas('peminjaman', function ($query) {
+                                            $query->whereIn('status', ['dipinjam', 'telat']);
+                                        })
+                                        ->exists();
+                                @endphp
+                                <button type="submit"
+                                    @if($alatSedangDipinjam) disabled @endif
+                                    class="bg-red-500 hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-3 py-1.5 rounded text-xs font-semibold transition">
                                     Hapus
                                 </button>
                             </form>

@@ -148,11 +148,10 @@ public function destroyAlat($id)
 {
     $alat = Alat::findOrFail($id);
 
-    // Cek apakah alat masih dipinjam
-    $masihDipinjam = DB::table('detail_peminjaman')
-        ->join('peminjamans', 'detail_peminjaman.peminjaman_id', '=', 'peminjamans.id')
-        ->where('detail_peminjaman.alat_id', $id)
-        ->where('peminjamans.status', 'dipinjam')
+    $masihDipinjam = $alat->detailPinjam()
+        ->whereHas('peminjaman', function ($query) {
+            $query->whereIn('status', ['dipinjam', 'telat']);
+        })
         ->exists();
 
     if ($masihDipinjam) {
@@ -474,12 +473,9 @@ public function destroyAlat($id)
     {
         $peminjaman = Peminjaman::with('detailPinjam')->findOrFail($id);
 
-        if ($peminjaman->status == 'dipinjam') {
-            foreach ($peminjaman->detailPinjam as $detail) {
-                if ($detail->alat) {
-                    $detail->alat->increment('stok', $detail->jumlah);
-                }
-            }
+        if (in_array($peminjaman->status, ['dipinjam', 'telat'], true)) {
+            return redirect()->route('admin.peminjaman.index')
+                ->with('error', 'Data peminjaman yang sedang aktif tidak bisa dihapus.');
         }
 
         $peminjaman->delete();

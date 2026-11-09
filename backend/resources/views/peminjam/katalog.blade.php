@@ -34,8 +34,29 @@
             </div>
         @endif
 
+        <form action="{{ route('peminjam.katalog') }}" method="GET" class="flex flex-col gap-3 rounded-lg border border-slate-200 bg-white p-4 md:flex-row md:items-end">
+            <div class="flex-1">
+                <label for="search" class="mb-1 block text-xs font-semibold text-slate-600">Cari Alat</label>
+                <input id="search" type="search" name="search" value="{{ $search }}" placeholder="Nama atau deskripsi alat..."
+                       class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+            <div class="md:w-64">
+                <label for="kategori_id" class="mb-1 block text-xs font-semibold text-slate-600">Kategori</label>
+                <select id="kategori_id" name="kategori_id" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <option value="">Semua kategori</option>
+                    @foreach($kategoris as $kategori)
+                        <option value="{{ $kategori->id }}" @selected((string) $kategoriId === (string) $kategori->id)>{{ $kategori->nama_kategori }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <button type="submit" class="rounded-md bg-slate-800 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-900">Cari</button>
+            @if($search !== '' || $kategoriId)
+                <a href="{{ route('peminjam.katalog') }}" class="rounded-md border border-slate-300 px-4 py-2 text-center text-sm font-semibold text-slate-700 hover:bg-slate-100">Reset</a>
+            @endif
+        </form>
+
         <form action="{{ route('peminjam.peminjaman.ajukan') }}" method="POST" class="space-y-5">
-            @csrf 
+            @csrf
 
             <section class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
                 <div class="grid grid-cols-1 gap-4 border-b border-slate-200 bg-slate-50 p-5 sm:grid-cols-[1fr_auto] sm:items-end">
@@ -48,50 +69,55 @@
                     </div>
                     <p class="text-sm text-slate-500">{{ $alats->count() }} alat tersedia untuk dipilih</p>
                 </div>
-                
-                <div class="grid grid-cols-1 gap-4 p-5 sm:grid-cols-2 xl:grid-cols-3">
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-700">
+                        <thead>
+                            <tr class="bg-slate-100 text-xs uppercase tracking-wide text-slate-600">
+                                <th class="border-b px-4 py-3">Pilih</th>
+                                <th class="border-b px-4 py-3">Gambar</th>
+                                <th class="border-b px-4 py-3">Nama Alat</th>
+                                <th class="border-b px-4 py-3">Kategori</th>
+                                <th class="border-b px-4 py-3">Deskripsi</th>
+                                <th class="border-b px-4 py-3">Stok</th>
+                                <th class="border-b px-4 py-3">Jumlah Pinjam</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
                     @forelse($alats as $alat)
-                        <article class="overflow-hidden rounded-lg border border-slate-200 bg-white transition hover:border-emerald-300 hover:shadow-md">
-                            <div class="aspect-[4/3] overflow-hidden bg-slate-100">
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-4 py-3">
+                                    <input id="alat-{{ $alat->id }}" type="checkbox" name="alat_id[{{ $alat->id }}]" value="{{ $alat->id }}"
+                                           @checked(old('alat_id.' . $alat->id))
+                                           class="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                                </td>
+                                <td class="px-4 py-3">
                                 @if($alat->gambar)
                                     <img src="{{ asset(str_starts_with($alat->gambar, 'storage/') ? $alat->gambar : 'storage/' . $alat->gambar) }}"
-                                         alt="Foto {{ $alat->nama_alat }}" loading="lazy" class="h-full w-full object-cover">
+                                         alt="Foto {{ $alat->nama_alat }}" loading="lazy" class="h-12 w-12 rounded-md object-cover">
                                 @else
-                                    <div class="flex h-full items-center justify-center bg-gradient-to-br from-slate-100 via-emerald-50 to-blue-100 text-sm font-medium text-slate-400">
-                                        Foto belum tersedia
+                                    <div class="flex h-12 w-12 items-center justify-center rounded-md bg-slate-100 text-[10px] text-slate-400">
+                                        Tidak ada
                                     </div>
                                 @endif
-                            </div>
-                            <div class="space-y-4 p-4">
-                                <div class="flex items-start justify-between gap-3">
-                                    <div class="min-w-0">
-                                        <p class="text-xs font-semibold uppercase text-emerald-700">{{ $alat->kategori->nama_kategori ?? 'Tanpa kategori' }}</p>
-                                        <h3 class="mt-1 font-bold text-slate-900">{{ $alat->nama_alat }}</h3>
-                                    </div>
-                                    <span class="shrink-0 rounded-md bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-800">{{ $alat->stok }} tersedia</span>
-                                </div>
-                                <p class="min-h-12 text-sm leading-5 text-slate-600">{{ $alat->deskripsi ?: 'Deskripsi alat belum tersedia.' }}</p>
-                                <div class="flex items-end justify-between gap-3 border-t border-slate-100 pt-3">
-                                    <label for="alat-{{ $alat->id }}" class="inline-flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-700">
-                                        <input id="alat-{{ $alat->id }}" type="checkbox" name="alat_id[{{ $alat->id }}]" value="{{ $alat->id }}"
-                                               @checked(old('alat_id.' . $alat->id))
-                                               class="h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
-                                        Pilih alat
-                                    </label>
-                                    <div>
-                                        <label for="jumlah-{{ $alat->id }}" class="mb-1 block text-xs font-medium text-slate-500">Jumlah</label>
+                                </td>
+                                <td class="px-4 py-3 font-semibold text-slate-900">{{ $alat->nama_alat }}</td>
+                                <td class="px-4 py-3">{{ $alat->kategori->nama_kategori ?? '-' }}</td>
+                                <td class="max-w-xs px-4 py-3 text-slate-500">{{ $alat->deskripsi ?: '-' }}</td>
+                                <td class="px-4 py-3 font-semibold">{{ $alat->stok }}</td>
+                                <td class="px-4 py-3">
                                         <input id="jumlah-{{ $alat->id }}" type="number" name="jumlah[{{ $alat->id }}]" min="1" max="{{ $alat->stok }}"
                                                value="{{ old('jumlah.' . $alat->id, 1) }}"
                                                class="w-20 rounded-md border border-slate-300 px-2.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
+                                </td>
+                            </tr>
                     @empty
-                        <div class="col-span-full rounded-md border border-dashed border-slate-300 px-5 py-12 text-center text-sm text-slate-500">
-                            Tidak ada alat yang tersedia saat ini.
-                        </div>
+                            <tr>
+                                <td colspan="7" class="px-5 py-10 text-center text-slate-500">Tidak ada alat yang sesuai dengan pencarian.</td>
+                            </tr>
                     @endforelse
+                        </tbody>
+                    </table>
                 </div>
 
                 @error('alat_id') <p class="px-5 pb-3 text-sm text-rose-600">{{ $message }}</p> @enderror

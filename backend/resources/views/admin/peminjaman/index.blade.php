@@ -102,7 +102,9 @@
                                         onsubmit="return confirm('Yakin ingin menghapus data peminjaman ini?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-semibold transition w-full">
+                                        <button type="submit"
+                                            @if(in_array($item->status, ['dipinjam', 'telat'], true)) disabled @endif
+                                            class="bg-red-500 hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-3 py-1 rounded text-xs font-semibold transition w-full">
                                             Hapus
                                         </button>
                                     </form>

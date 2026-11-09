@@ -110,6 +110,33 @@
 
                     @endif
 
+                    <!-- MENU KHUSUS PEMINJAM -->
+                    @if(auth()->user()->role === 'peminjam')
+                        <a href="{{ route('peminjam.dashboard') }}"
+                            class="group flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 {{ request()->routeIs('peminjam.dashboard') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                            <svg class="w-5 h-5 {{ request()->routeIs('peminjam.dashboard') ? 'text-blue-400' : 'text-gray-400 group-hover:text-blue-400' }} transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                            </svg>
+                            <span>Dashboard</span>
+                        </a>
+
+                        <a href="{{ route('peminjam.katalog') }}"
+                            class="group flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 {{ request()->routeIs('peminjam.katalog') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                            <svg class="w-5 h-5 {{ request()->routeIs('peminjam.katalog') ? 'text-blue-400' : 'text-gray-400 group-hover:text-blue-400' }} transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            <span>Ajukan Peminjaman</span>
+                        </a>
+
+                        <a href="{{ route('peminjam.riwayat') }}"
+                            class="group flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 {{ request()->routeIs('peminjam.riwayat') ? 'bg-gray-800 text-white font-medium shadow' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                            <svg class="w-5 h-5 {{ request()->routeIs('peminjam.riwayat') ? 'text-blue-400' : 'text-gray-400 group-hover:text-blue-400' }} transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>Riwayat Peminjaman</span>
+                        </a>
+                    @endif
+
                     <!-- MENU KHUSUS PETUGAS -->
                     @if(auth()->user()->role === 'petugas')
                         <!-- Persetujuan Peminjaman -->
@@ -155,9 +182,20 @@
             <div class="p-4 border-t border-slate-800 text-xs text-slate-400 bg-slate-950/40">
                 <p class="mb-0.5">Logged in as :</p>
                 @auth
-                    <span class="font-semibold text-slate-200 text-sm">
-                        {{ auth()->user()->name }}
-                    </span>
+                    <div class="mt-2 flex items-center gap-3">
+                        @if(auth()->user()->foto_profile)
+                            <img src="{{ asset('storage/' . ltrim(auth()->user()->foto_profile, '/')) }}"
+                                 alt="Foto {{ auth()->user()->name }}"
+                                 class="h-10 w-10 shrink-0 rounded-full border-2 border-slate-700 object-cover">
+                        @else
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-700 text-sm font-bold text-white">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                        @endif
+                        <span class="truncate font-semibold text-slate-200 text-sm">
+                            {{ auth()->user()->name }}
+                        </span>
+                    </div>
                 @endauth
             </div>
 

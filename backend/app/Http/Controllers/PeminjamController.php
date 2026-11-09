@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alat;
+use App\Models\Kategori;
 use App\Models\Peminjaman;
 use App\Models\DetailPinjam;
 use Illuminate\Http\Request;
@@ -31,10 +32,28 @@ class PeminjamController extends Controller
     }
 
     // Melihat daftar/katalog alat yang tersedia
-    public function katalogAlat()
+    public function katalogAlat(Request $request)
     {
-        $alats = Alat::with('kategori')->where('stok', '>', 0)->get();
-        return view('peminjam.katalog', compact('alats'));
+        $search = trim((string) $request->input('search', ''));
+        $kategoriId = $request->input('kategori_id');
+
+        $alats = Alat::with('kategori')
+            ->where('stok', '>', 0)
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('nama_alat', 'like', "%{$search}%")
+                        ->orWhere('deskripsi', 'like', "%{$search}%");
+                });
+            })
+            ->when($kategoriId, function ($query) use ($kategoriId) {
+                $query->where('kategori_id', $kategoriId);
+            })
+            ->orderBy('nama_alat')
+            ->get();
+
+        $kategoris = Kategori::orderBy('nama_kategori')->get();
+
+        return view('peminjam.katalog', compact('alats', 'kategoris', 'search', 'kategoriId'));
     }
 
     public function ajukanPeminjaman(Request $request)
